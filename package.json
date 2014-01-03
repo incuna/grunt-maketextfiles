@@ -28,7 +28,7 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "requirejs": "2.1.4",
+    "requirejs": "2.1.4"
   },
   "devDependencies": {
     "grunt": "~0.4.2"
