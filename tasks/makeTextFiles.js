@@ -44,7 +44,7 @@ module.exports = function(grunt) {
                 } else {
                     var found = grunt.file.expand('*/' + settingsFileName)
                     if (found.length) {
-                        settingsPath = found[0]);
+                        settingsPath = found[0];
                     }
                 }
             }
