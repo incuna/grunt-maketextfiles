@@ -1,0 +1,45 @@
+{
+  "name": "grunt-makeTextFiles",
+  "description": "Builds textfiles.js needed by eDetails",
+  "version": "0.1.0",
+  "homepage": "",
+  "author": {
+    "name": "Incuna Ltd.",
+    "email": "info@incuna.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/incuna/grunt-makeTextFiles"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "requirejs": "2.1.4",
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt": "~0.4.2"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.2"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}
