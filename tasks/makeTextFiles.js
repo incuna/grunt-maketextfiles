@@ -29,7 +29,8 @@ module.exports = function(grunt) {
 
         var requireConfigPath = 'jam/require.config.js';
         var settingsFileName = 'settings.js';
-        var templateFileName = 'textFiles.template.js';
+        //template file relative to this file
+        var templateFileName = '../templates/textFiles.template.js';
         var destinationFileName = 'textFiles.js';
 
         function getSettingsFilePath() {
