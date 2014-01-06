@@ -1,7 +1,7 @@
 {
   "name": "grunt-makeTextFiles",
   "description": "Builds textfiles.js needed by eDetails",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "homepage": "",
   "author": {
     "name": "Incuna Ltd.",
