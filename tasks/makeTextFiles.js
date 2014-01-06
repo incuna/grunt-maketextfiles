@@ -32,7 +32,12 @@ module.exports = function(grunt) {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
             dataDirs: [],
-            projectPath: 'project/'
+            projectPath: 'project/',
+            fileTypes: [
+                'json',
+                'yaml',
+                'html'
+            ]
         });
 
         //template file relative to this file
@@ -63,6 +68,7 @@ module.exports = function(grunt) {
             return modulePath;
         };
 
+        var fileMatchString = '**/*.{' + options.fileTypes.join(',') + '}';
         var filePaths = _.chain(options.dataDirs).map(function (module) {
             // Use require to determine the actual file path of the module
             var processedDir = modulePath(module);
@@ -70,7 +76,7 @@ module.exports = function(grunt) {
                 cwd: options.projectPath + processedDir
             }
             //get the files relative to each of the module directories
-            var files = grunt.file.expand(globOptions, '**/*.{json,yaml,html}')
+            var files = grunt.file.expand(globOptions, fileMatchString);
 
             // Add the module path back to the start of the relative file paths
             var projectFiles = _.map(files, function (file) {
