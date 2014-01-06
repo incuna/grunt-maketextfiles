@@ -14,43 +14,11 @@ module.exports = function(grunt) {
     // creation: http://gruntjs.com/creating-tasks
 
     grunt.registerTask('makeTextFiles', 'Builds textfiles.js needed by eDetails', function() {
-        // Merge task-specific and/or target-specific options with these defaults.
-        var options = this.options({
-            settingsPath: ''
-        });
-
         // Nodejs libs.
         var fs = require('fs');
         var path = require('path');
         var requirejs = require('requirejs');
         var _ = require('lodash');
-
-        //template file relative to this file
-        var templateFileName = '../templates/textFiles.template.js';
-        //project file paths
-        var projectPath = 'project/';
-        var requireConfigPath = projectPath + 'jam/require.config.js';
-        var settingsFileName = 'settings.js';
-        var destinationFileName = projectPath + 'textFiles.js';
-
-        function getSettingsFilePath() {
-            var settingsPath;
-            if (options.settingsPath) {
-                // settingsPath specified
-                settingsPath = options.settingsPath;
-            } else {
-                // Guess settingsPath
-                if (grunt.file.exists(settingsFileName)) {
-                    settingsPath = settingsFileName;
-                } else {
-                    var found = grunt.file.expand('*/' + settingsFileName)
-                    if (found.length) {
-                        settingsPath = found[0];
-                    }
-                }
-            }
-            return settingsPath;
-        }
 
         //converts path relative to project root to absolute file system path 
         function projectToAbsPath(relPath) {
@@ -61,14 +29,17 @@ module.exports = function(grunt) {
             return path.join(__dirname, relPath);
         }
 
-        //get settings Path and check valid
-        var settingsPath = getSettingsFilePath();
-        if (grunt.file.exists(settingsPath)) {
-            grunt.log.writeln('Using ' + settingsPath);
-        } else {
-            //exit with task error
-            grunt.warn('Cant find ' + settingsFileName, 3);
-        }
+        // Merge task-specific and/or target-specific options with these defaults.
+        var options = this.options({
+            dataDirs: [],
+            projectPath: 'project/'
+        });
+
+        //template file relative to this file
+        var templateFileName = '../templates/textFiles.template.js';
+        //project file paths
+        var requireConfigPath = options.projectPath + 'jam/require.config.js';
+        var destinationFileName = options.projectPath + 'textFiles.js';
 
         // Get requireJS config to be able to resolve module paths.
         if (grunt.file.exists(requireConfigPath)) {
@@ -92,16 +63,14 @@ module.exports = function(grunt) {
             return modulePath;
         };
 
-        var settings = requirejs(projectToAbsPath(settingsPath));
-        var filePaths = _.chain(settings.DATA_DIRS).map(function (module) {
-            
+        var filePaths = _.chain(options.dataDirs).map(function (module) {
             // Use require to determine the actual file path of the module
             var processedDir = modulePath(module);
-            var options = {
-                cwd: projectPath + processedDir
+            var globOptions = {
+                cwd: options.projectPath + processedDir
             }
             //get the files relative to each of the module directories
-            var files = grunt.file.expand(options, '**/*.{json,yaml,html}')
+            var files = grunt.file.expand(globOptions, '**/*.{json,yaml,html}')
 
             // Add the module path back to the start of the relative file paths
             var projectFiles = _.map(files, function (file) {
