@@ -63,7 +63,15 @@ In this example, the default options are used to do something with whatever. So 
 grunt.initConfig({
   makeTextFiles: {
     options: {
-      dataDirs: [],
+      dataDirs: [
+        'compiled-data',
+        'templates',
+        'edetail/templates',
+        'edetail-widgets/templates',
+        'edetail-video/templates',
+        'edetail-audio/templates',
+        'edetail-presentation-builder/templates'
+      ],
       projectPath: 'project/',
       fileTypes: [
         'json',
