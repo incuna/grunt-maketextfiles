@@ -1,6 +1,7 @@
 # grunt-makeTextFiles
 
-> Builds textfiles.js needed by eDetails
+> Builds the textfiles.js manifest needed to import data and template textfiles into requireJS for eDetails
+> Based on original makeTextFiles npm module: https://github.com/incuna/MakeTextFiles
 
 ## Getting Started
 This plugin requires Grunt `~0.4.2`
