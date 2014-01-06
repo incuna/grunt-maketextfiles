@@ -13,25 +13,25 @@ module.exports = function(grunt) {
     // Please see the Grunt documentation for more information regarding task
     // creation: http://gruntjs.com/creating-tasks
 
-    grunt.registerMultiTask('makeTextFiles', 'Builds textfiles.js needed by eDetails', function() {
+    grunt.registerTask('makeTextFiles', 'Builds textfiles.js needed by eDetails', function() {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
             settingsPath: ''
         });
 
-
         // Nodejs libs.
         var fs = require('fs');
         var path = require('path');
         var requirejs = require('requirejs');
-        var glob = require("glob");
         var _ = require('lodash');
 
-        var requireConfigPath = 'jam/require.config.js';
-        var settingsFileName = 'settings.js';
         //template file relative to this file
         var templateFileName = '../templates/textFiles.template.js';
-        var destinationFileName = 'textFiles.js';
+        //project file paths
+        var projectPath = 'project/';
+        var requireConfigPath = projectPath + 'jam/require.config.js';
+        var settingsFileName = 'settings.js';
+        var destinationFileName = projectPath + 'textFiles.js';
 
         function getSettingsFilePath() {
             var settingsPath;
@@ -78,8 +78,8 @@ module.exports = function(grunt) {
             //this is an old non-jam project?
             requirejs.config({
                 'paths': {
-                'lib': '../lib',
-                'lodash': '../lib/require-underscore/underscore'
+                    'lib': '../lib',
+                    'lodash': '../lib/require-underscore/underscore'
                 }
             });
         }
@@ -88,21 +88,27 @@ module.exports = function(grunt) {
         var root_len = requirejs.toUrl('').replace(/.js$/, '').length;
         //returns the relative module path to the requireJS root path
         function modulePath(module) {
-          return requirejs.toUrl(module).replace(/.js$/, '').substr(root_len);
+            var modulePath = requirejs.toUrl(module).replace(/.js$/, '').substr(root_len);
+            return modulePath;
         };
 
         var settings = requirejs(projectToAbsPath(settingsPath));
         var filePaths = _.chain(settings.DATA_DIRS).map(function (module) {
-            // Use require to determine the module path.
+            
+            // Use require to determine the actual file path of the module
             var processedDir = modulePath(module);
             var options = {
-                cwd: processedDir
+                cwd: projectPath + processedDir
             }
-
+            //get the files relative to each of the module directories
             var files = grunt.file.expand(options, '**/*.{json,yaml,html}')
 
-            // Append the file paths to the module path.
-            return _(files).map(function (file) {return path.join(module, file);});
+            // Add the module path back to the start of the relative file paths
+            var projectFiles = _.map(files, function (file) {
+                var moduleFile = path.join(module, file);
+                return moduleFile;
+            });
+            return projectFiles;
         }).flatten().value();
 
         if (!filePaths) {
@@ -119,7 +125,7 @@ module.exports = function(grunt) {
         //get absolute template path in filesystem
         var templatePath = pluginToAbsPath(templateFileName);
         //get template file contents
-        var templateString = fs.readFileSync(absTemplatePath, 'utf8');
+        var templateString = fs.readFileSync(templatePath, 'utf8');
 
         grunt.log.writeln('Writing ' + destinationFileName);
         var fileTemplate = _.template(templateString);
@@ -127,7 +133,8 @@ module.exports = function(grunt) {
             textFiles: sortedPaths.join("',\n        '"),
             paths: textPaths.join("',\n    '")
         });
+        // grunt.log.writeln('destinationFileContents ' + destinationFileContents);
         var destinationPath = projectToAbsPath(destinationFileName);
-        fs.writeFile(destinationPath, destinationFileContents);
+        fs.writeFileSync(destinationPath, destinationFileContents);
     });
 };
