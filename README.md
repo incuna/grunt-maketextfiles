@@ -48,7 +48,7 @@ Default value: `project/`
 Path to the project folder which contains the modules. Output file is also written here.
 Needs trailing slash.
 
-#### options.projectPath
+#### options.fileTypes
 Type: `Array`
 Default value: `['json', 'yaml', 'html']`
 
