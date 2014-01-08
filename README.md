@@ -74,7 +74,7 @@ To generate the
 Type: `Array`
 Default value: `[]`
 
-An array of objects contaiing properties for requirejs module names and paths look for files in.
+An array of objects containing properties for requirejs module names and paths look for files in.
 
 #### options.projectPath
 Type: `String`
