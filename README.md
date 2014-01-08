@@ -24,14 +24,49 @@ grunt.loadNpmTasks('grunt-maketextfiles');
 In your project's Gruntfile, add a section named `makeTextFiles` to the data object passed into `grunt.initConfig()`.
 
 ```js
-grunt.initConfig({
-  makeTextFiles: {
-    options: {
+var baseDir = 'project/';
+//find and load the requirejs settings module
+var settings = require('grunt-maketextfiles/lib/settings').init(grunt);
+var textFileTypes = [
+    'json',
+    'yaml',
+    'html'
+];
+var textWatchDirs = settings.modulePaths.map(function (mobule) {
+    return baseDir + dir + '/**/*.{' + textFileTypes.join(',') + '}';
+});
 
-    },
-  },
+grunt.initConfig({
+    baseDir: baseDir,
+    textDirs: settings.modulePaths,
+    textWatchDirs: textWatchDirs,
+    textFileTypes: textFileTypes,
+    makeTextFiles: {
+        options: {
+            dataDirs: '<%= textDirs %>',
+            fileTypes: '<%= textFileTypes %>'
+        },
+        //if you are suing grunt watch, also add
+        watch: {
+            options: {
+                atBegin: true,
+                interrupt: true
+            },
+            textFiles: {
+                files: '<%= textWatchDirs %>',
+                tasks: ['makeTextFiles'],
+                options: {
+                    event: ['added', 'deleted'],
+                    dataDirs: '<%= textDirs %>',
+                    fileTypes: '<%= textFileTypes %>'
+                }
+            }
+        }
+    }
 });
 ```
+
+To generate the 
 
 ### Options
 
