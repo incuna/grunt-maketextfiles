@@ -46,20 +46,20 @@ grunt.initConfig({
             dataDirs: '<%= textDirs %>',
             fileTypes: '<%= textFileTypes %>'
         },
-        //if you are using grunt watch, also add
-        watch: {
+    },
+    //if you are using grunt watch, also add
+    watch: {
+        options: {
+            atBegin: true,
+            interrupt: true
+        },
+        textFiles: {
+            files: '<%= textWatchDirs %>',
+            tasks: ['makeTextFiles'],
             options: {
-                atBegin: true,
-                interrupt: true
-            },
-            textFiles: {
-                files: '<%= textWatchDirs %>',
-                tasks: ['makeTextFiles'],
-                options: {
-                    event: ['added', 'deleted'],
-                    dataDirs: '<%= textDirs %>',
-                    fileTypes: '<%= textFileTypes %>'
-                }
+                event: ['added', 'deleted'],
+                dataDirs: '<%= textDirs %>',
+                fileTypes: '<%= textFileTypes %>'
             }
         }
     }
