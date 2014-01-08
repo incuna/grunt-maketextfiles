@@ -83,7 +83,7 @@ module.exports = function(grunt) {
             paths: textPaths.join("',\n    '")
         });
         // grunt.log.writeln('destinationFileContents ' + destinationFileContents);
-        var destinationPath = projectToAbsPath(options.destinationFileName);
+        var destinationPath = projectToAbsPath(options.projectPath + options.destinationFileName);
         fs.writeFileSync(destinationPath, destinationFileContents);
     });
 };
