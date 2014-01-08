@@ -1,7 +1,7 @@
 # grunt-makeTextFiles
 
 > Builds the textfiles.js manifest needed to import data and template textfiles into requireJS for eDetails
-> Based on original makeTextFiles npm module: https://github.com/incuna/MakeTextFiles
+> Based on original makeTextFiles npm module: https://github.com/incuna/maketextfiles
 
 ## Getting Started
 This plugin requires Grunt `~0.4.2`
@@ -9,13 +9,13 @@ This plugin requires Grunt `~0.4.2`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-makeTextFiles --save-dev
+npm install grunt-maketextfiles --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-makeTextFiles');
+grunt.loadNpmTasks('grunt-maketextfiles');
 ```
 
 ## The "makeTextFiles" task
@@ -24,14 +24,49 @@ grunt.loadNpmTasks('grunt-makeTextFiles');
 In your project's Gruntfile, add a section named `makeTextFiles` to the data object passed into `grunt.initConfig()`.
 
 ```js
-grunt.initConfig({
-  makeTextFiles: {
-    options: {
+var baseDir = 'project/';
+//find and load the requirejs settings module
+var settings = require('grunt-maketextfiles/lib/settings').init(grunt);
+var textFileTypes = [
+    'json',
+    'yaml',
+    'html'
+];
+var textWatchDirs = settings.modulePaths.map(function (mobule) {
+    return baseDir + module.path + '/**/*.{' + textFileTypes.join(',') + '}';
+});
 
-    },
-  },
+grunt.initConfig({
+    baseDir: baseDir,
+    textDirs: settings.modulePaths,
+    textWatchDirs: textWatchDirs,
+    textFileTypes: textFileTypes,
+    makeTextFiles: {
+        options: {
+            dataDirs: '<%= textDirs %>',
+            fileTypes: '<%= textFileTypes %>'
+        },
+        //if you are using grunt watch, also add
+        watch: {
+            options: {
+                atBegin: true,
+                interrupt: true
+            },
+            textFiles: {
+                files: '<%= textWatchDirs %>',
+                tasks: ['makeTextFiles'],
+                options: {
+                    event: ['added', 'deleted'],
+                    dataDirs: '<%= textDirs %>',
+                    fileTypes: '<%= textFileTypes %>'
+                }
+            }
+        }
+    }
 });
 ```
+
+To generate the 
 
 ### Options
 
@@ -39,7 +74,7 @@ grunt.initConfig({
 Type: `Array`
 Default value: `[]`
 
-An array of requirejs module names/paths to parse. The corresponding real paths will be parsed to looks for text files
+An array of objects containing properties for requirejs module names and paths look for files in.
 
 #### options.projectPath
 Type: `String`
@@ -47,6 +82,12 @@ Default value: `project/`
 
 Path to the project folder which contains the modules. Output file is also written here.
 Needs trailing slash.
+
+#### options.destinationFileName
+Type: `String`
+Default value: `textfiles.js`
+
+The name of the output file. Written to options.projectPath.
 
 #### options.fileTypes
 Type: `Array`
@@ -57,22 +98,41 @@ Array of file extensions to look for in the matching folders.
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+These would be the default options as used in a Gruntfile.
 
 ```js
 grunt.initConfig({
   makeTextFiles: {
     options: {
       dataDirs: [
-        'compiled-data',
-        'templates',
-        'edetail/templates',
-        'edetail-widgets/templates',
-        'edetail-video/templates',
-        'edetail-audio/templates',
-        'edetail-presentation-builder/templates'
+        {
+          name: 'compiled-data',
+          path: 'compiled-data'
+        },
+        {
+          name: 'templates',
+          path: 'templates'
+        },
+        {
+          name: 'edetail/templates',
+          path: 'jam/edetail/templates'
+        },
+        {
+          name: 'edetail-widgets/templates',
+          path: 'jam/edetail-widgets/templates'
+        },    {
+          name: 'edetail-video/templates',
+          path: 'jam/edetail-video/templates'
+        },    {
+          name: 'edetail-audio/templates',
+          path: 'jam/edetail-audio/templates'
+        },    {
+          name: 'edetail-presentation-builder/templates',
+          path: 'jam/edetail-presentation-builder/templates'
+        }
       ],
       projectPath: 'project/',
+      destinationFileName: 'textFiles.js',
       fileTypes: [
         'json',
         'yaml',
