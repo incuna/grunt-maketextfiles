@@ -32,7 +32,7 @@ var textFileTypes = [
     'yaml',
     'html'
 ];
-var textWatchDirs = settings.modulePaths.map(function (mobule) {
+var textWatchDirs = grunt.util._.map(settings.modulePaths, function (module) {
     return baseDir + module.path + '/**/*.{' + textFileTypes.join(',') + '}';
 });
 
