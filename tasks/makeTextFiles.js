@@ -46,8 +46,6 @@ module.exports = function(grunt) {
         //Look through each module path and make list of matching text files
         var fileMatchString = '**/*.{' + options.fileTypes.join(',') + '}';
 
-        console.log('options.dataDirs', options.dataDirs);
-
         var filePaths = _.chain(options.dataDirs).map(function (module) {
             var globOptions = {
                 cwd: options.projectPath + module.path
