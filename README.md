@@ -33,7 +33,7 @@ var textFileTypes = [
     'html'
 ];
 var textWatchDirs = settings.modulePaths.map(function (mobule) {
-    return baseDir + dir + '/**/*.{' + textFileTypes.join(',') + '}';
+    return baseDir + module.path + '/**/*.{' + textFileTypes.join(',') + '}';
 });
 
 grunt.initConfig({
