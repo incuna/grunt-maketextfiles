@@ -46,7 +46,7 @@ grunt.initConfig({
             dataDirs: '<%= textDirs %>',
             fileTypes: '<%= textFileTypes %>'
         },
-        //if you are suing grunt watch, also add
+        //if you are using grunt watch, also add
         watch: {
             options: {
                 atBegin: true,
