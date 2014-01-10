@@ -28,7 +28,6 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "requirejs": "~2.1.0",
     "lodash": "~2.4.1"
   },
   "devDependencies": {
