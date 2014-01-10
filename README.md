@@ -24,28 +24,16 @@ grunt.loadNpmTasks('grunt-maketextfiles');
 In your project's Gruntfile, add a section named `makeTextFiles` to the data object passed into `grunt.initConfig()`.
 
 ```js
-var baseDir = 'project/';
-//find and load the requirejs settings module
-var settings = require('grunt-maketextfiles/lib/settings').init(grunt);
-var textFileTypes = [
-    'json',
-    'yaml',
-    'html'
-];
-var textWatchDirs = grunt.util._.map(settings.modulePaths, function (module) {
-    return baseDir + module.path + '/**/*.{' + textFileTypes.join(',') + '}';
-});
+//find and load the settings for makeTextFiles module
+var makeTextFileSettings = require('grunt-makeTextFiles/lib/settings').init(grunt);
 
 grunt.initConfig({
-    baseDir: baseDir,
-    textDirs: settings.modulePaths,
-    textWatchDirs: textWatchDirs,
-    textFileTypes: textFileTypes,
+    makeTextFileSettings: makeTextFileSettings,
+    //compile list of text files into textfiles.js
     makeTextFiles: {
         options: {
-            dataDirs: '<%= textDirs %>',
-            fileTypes: '<%= textFileTypes %>'
-        },
+            settings: '<%= makeTextFileSettings %>'
+        }
     },
     //if you are using grunt watch, also add
     watch: {
@@ -54,12 +42,11 @@ grunt.initConfig({
             interrupt: true
         },
         textFiles: {
-            files: '<%= textWatchDirs %>',
+            files: '<%= makeTextFileSettings.filePatterns %>',
             tasks: ['makeTextFiles'],
             options: {
                 event: ['added', 'deleted'],
-                dataDirs: '<%= textDirs %>',
-                fileTypes: '<%= textFileTypes %>'
+                settings: '<%= makeTextFileSettings %>'
             }
         }
     }
@@ -70,30 +57,17 @@ To generate the
 
 ### Options
 
-#### options.dataDirs
+#### options.settings
 Type: `Array`
-Default value: `[]`
+Default value: `{}`
 
-An array of objects containing properties for requirejs module names and paths look for files in.
-
-#### options.projectPath
-Type: `String`
-Default value: `project/`
-
-Path to the project folder which contains the modules. Output file is also written here.
-Needs trailing slash.
+Required. The settings object output from the lib/settings.js module.
 
 #### options.destinationFileName
 Type: `String`
 Default value: `textfiles.js`
 
 The name of the output file. Written to options.projectPath.
-
-#### options.fileTypes
-Type: `Array`
-Default value: `['json', 'yaml', 'html']`
-
-Array of file extensions to look for in the matching folders.
 
 ### Usage Examples
 
@@ -104,40 +78,8 @@ These would be the default options as used in a Gruntfile.
 grunt.initConfig({
   makeTextFiles: {
     options: {
-      dataDirs: [
-        {
-          name: 'compiled-data',
-          path: 'compiled-data'
-        },
-        {
-          name: 'templates',
-          path: 'templates'
-        },
-        {
-          name: 'edetail/templates',
-          path: 'jam/edetail/templates'
-        },
-        {
-          name: 'edetail-widgets/templates',
-          path: 'jam/edetail-widgets/templates'
-        },    {
-          name: 'edetail-video/templates',
-          path: 'jam/edetail-video/templates'
-        },    {
-          name: 'edetail-audio/templates',
-          path: 'jam/edetail-audio/templates'
-        },    {
-          name: 'edetail-presentation-builder/templates',
-          path: 'jam/edetail-presentation-builder/templates'
-        }
-      ],
-      projectPath: 'project/',
+      settings: makeTextFileSettings
       destinationFileName: 'textFiles.js',
-      fileTypes: [
-        'json',
-        'yaml',
-        'html'
-      ]
     },
   },
 });
