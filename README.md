@@ -87,16 +87,16 @@ Array of file extensions to match inside the textDirs.path
 "edetail": {
     "textDirs": [
         {
-            path: "data"
-            fileTypes: [
-                'json',
-                'yaml'
+            "path": "data"
+            "fileTypes": [
+                "json",
+                "yaml"
             ] 
         },
         {
-            path: "templates"
-            fileTypes: [
-                'html'
+            "path": "templates"
+            "fileTypes": [
+                "html"
             ] 
         }
     ]
