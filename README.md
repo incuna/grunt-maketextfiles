@@ -24,50 +24,32 @@ grunt.loadNpmTasks('grunt-maketextfiles');
 In your project's Gruntfile, add a section named `makeTextFiles` to the data object passed into `grunt.initConfig()`.
 
 ```js
-//find and load the settings for makeTextFiles module
-var makeTextFileSettings = require('grunt-makeTextFiles/lib/settings').init(grunt);
 
 grunt.initConfig({
-    makeTextFileSettings: makeTextFileSettings,
-    //compile list of text files into textfiles.js
-    makeTextFiles: {
-        options: {
-            settings: '<%= makeTextFileSettings %>'
-        }
-    },
-    //if you are using grunt watch, also add
+    //if you are using grunt watch, add
     watch: {
         options: {
             atBegin: true,
             interrupt: true
         },
         textFiles: {
-            files: '<%= makeTextFileSettings.filePatterns %>',
+            files: ['project/data', 'project/templates', 'project/jam/require.config'],
             tasks: ['makeTextFiles'],
             options: {
                 event: ['added', 'deleted'],
-                settings: '<%= makeTextFileSettings %>'
             }
         }
     }
 });
 ```
 
-To generate the 
-
 ### Options
-
-#### options.settings
-Type: `Array`
-Default value: `{}`
-
-Required. The settings object output from the lib/settings.js module.
 
 #### options.destinationFileName
 Type: `String`
-Default value: `textfiles.js`
+Default value: `project/textFiles.js`
 
-The name of the output file. Written to options.projectPath.
+The name of the output file relative to the Gruntfile.
 
 ### Usage Examples
 
@@ -78,11 +60,47 @@ These would be the default options as used in a Gruntfile.
 grunt.initConfig({
   makeTextFiles: {
     options: {
-      settings: makeTextFileSettings
-      destinationFileName: 'textFiles.js',
+      destinationFileName: 'project/textFiles.js',
     },
   },
 });
+```
+
+### package.json files
+This task reads text directories from package.json file for the main project and jam packages.
+
+Text file definitions must be declared inside the `edetail.textDirs` property in a package file. This is an array of objects to parse, each containing these properties:
+
+#### textDirs.path
+Type: `String`
+
+Relative path of the directory to parse
+
+#### textDirs.fileTypes
+Type: `array`
+
+Array of file extensions to match inside the textDirs.path
+
+#### example package.json property
+
+```
+"edetail": {
+    "textDirs": [
+        {
+            path: "data"
+            fileTypes: [
+                'json',
+                'yaml'
+            ] 
+        },
+        {
+            path: "templates"
+            fileTypes: [
+                'html'
+            ] 
+        }
+    ]
+}
 ```
 
 ## Contributing

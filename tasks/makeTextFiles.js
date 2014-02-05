@@ -14,14 +14,6 @@ module.exports = function(grunt) {
     // creation: http://gruntjs.com/creating-tasks
 
     grunt.registerTask('makeTextFiles', 'Builds textfiles.js needed by eDetails', function() {
-        // "edetail": [
-        //      path: "templates"
-        //      fileTypes: [
-        //          'json',
-        //          'yaml',
-        //          'html'
-        //      ] 
-        // ]
 
         // import Nodejs libs
         var fs = require('fs');
@@ -59,8 +51,7 @@ module.exports = function(grunt) {
 
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
-            destinationFileName: 'textFiles.js',
-            projectPath: 'project/'
+            destinationFileName: 'project/textFiles.js'
         });
 
         //static vars
@@ -147,8 +138,7 @@ module.exports = function(grunt) {
             requirePaths: requireJSPaths.join("',\n    '"),
             textFiles: filePaths.join("',\n        '")
         });
-        // grunt.log.writeln('destinationFileContents ' + destinationFileContents);
-        var destinationPath = projectToAbsPath(options.projectPath + options.destinationFileName);
+        var destinationPath = projectToAbsPath(options.destinationFileName);
         fs.writeFileSync(destinationPath, destinationFileContents);
     });
 };
