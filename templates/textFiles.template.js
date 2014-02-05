@@ -1,6 +1,6 @@
 define([
     'lodash',
-    '<%= paths %>'
+    '<%= requirePaths %>'
 ], function (_) {
     var files = [
         '<%= textFiles %>'
