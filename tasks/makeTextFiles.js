@@ -20,16 +20,17 @@ module.exports = function(grunt) {
         var path = require('path');
         var _ = require('lodash');
 
-        // Merge task-specific and/or target-specific options with these defaults.
-        var options = this.options({
-            destinationFileName: 'project/textFiles.js'
-        });
-
         //static vars
         var packageFileName = 'package.json';
+        var projectBasePath = 'project/';
         var projectPackage = grunt.file.readJSON(packageFileName);
         //template file relative to this file
         var templateFileName = '../templates/textFiles.template.js';
+
+        // Merge task-specific and/or target-specific options with these defaults.
+        var options = this.options({
+            destinationFileName: projectBasePath + 'textFiles.js'
+        });
 
         //converts path relative to project root to absolute file system path 
         function projectToAbsPath(relPath) {
@@ -43,10 +44,11 @@ module.exports = function(grunt) {
         //takes a parsed package.json object and requireJS module name, and returns any text dirs as an array
         function textDirsFromPackage(packageObj, jamDir) {
             var packageName = null;
-            var packagePath = null;
+            var basePath = projectBasePath;
             if (jamDir) {
+                //we only need to store package name and path for jam packages, not root project package
                 packageName = packageObj.name;
-                packagePath = jamDir + '/' + packageName;
+                basePath = jamDir + '/' + packageName + '/';
             }
 
             var textDirs = [];
@@ -54,7 +56,7 @@ module.exports = function(grunt) {
                 _(packageObj.edetail.textDirs).each(function(textDir) {
                     //we add the package name and path properties so we can use them later when making the template
                     textDir.packageName = packageName;
-                    textDir.packagePath = packagePath;
+                    textDir.basePath = basePath;
                     textDirs.push(textDir);
                 });
             }
@@ -97,23 +99,32 @@ module.exports = function(grunt) {
             //Go through each text dir, adding matching files to the list
             _(textDirs).each(function (textDir) {
                 //match all files for this textdir
-                var fileMatchString = textDir.path + '/**/*.{' + textDir.fileTypes.join(',') + '}';
+                var fileMatchStrings = [];
+                _(textDir.fileTypes).each(function(fileType) {
+                    var fileTypeMatchString = textDir.path + '/**/*.' + fileType;
+                    fileMatchStrings.push(fileTypeMatchString);
+                });
 
                 var matchOptions = {};
-                if (textDir.packagePath) {
+                if (textDir.basePath) {
                     //get files relative to package path if present
-                    matchOptions.cwd = textDir.packagePath;
+                    matchOptions.cwd = textDir.basePath;
                 }
 
-                var matchingFiles = grunt.file.expand(matchOptions, fileMatchString);
+                var matchingFiles = grunt.file.expand(matchOptions, fileMatchStrings);
 
                 //populate lists for template
                 _(matchingFiles).each(function(filePath) {
                     if (!filePaths[filePath]) {
                         //dont add if we already have the paths in the list
                         //this allows overriding of paths by the project
+                        var requireBasePath = '';
+                        if (textDir.packageName) {
+                            requireBasePath = textDir.packageName + '/';
+                        }
+
                         filePaths.push(filePath);
-                        requireJSPaths.push(textDir.packageName + '/' + filePath);
+                        requireJSPaths.push(requireBasePath + filePath);
                     }
                 });
             });
@@ -149,6 +160,7 @@ module.exports = function(grunt) {
 
             //Add text dirs from main project
             textDirs = textDirs.concat(textDirsFromPackage(projectPackage));
+
 
             var jamPackages = getJamPackages();
             //Add jam package text dirs to list
