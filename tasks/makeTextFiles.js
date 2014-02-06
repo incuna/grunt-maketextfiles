@@ -120,7 +120,7 @@ module.exports = function(grunt) {
                         //this allows overriding of paths by the project
                         var requireBasePath = 'text!';
                         if (textDir.packageName) {
-                            requireBasePath = textDir.packageName + '/';
+                            requireBasePath += textDir.packageName + '/';
                         }
 
                         filePaths.push(filePath);
@@ -160,7 +160,6 @@ module.exports = function(grunt) {
 
             //Add text dirs from main project
             textDirs = textDirs.concat(textDirsFromPackage(projectPackage));
-
 
             var jamPackages = getJamPackages();
             //Add jam package text dirs to list
