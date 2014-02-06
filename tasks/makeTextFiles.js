@@ -52,8 +52,8 @@ module.exports = function(grunt) {
             }
 
             var textDirs = [];
-            if (packageObj.edetail && packageObj.edetail.textDirs) {
-                _(packageObj.edetail.textDirs).each(function(textDir) {
+            if (packageObj.textDirs) {
+                _(packageObj.textDirs).each(function(textDir) {
                     //we add the package name and path properties so we can use them later when making the template
                     textDir.packageName = packageName;
                     textDir.basePath = basePath;

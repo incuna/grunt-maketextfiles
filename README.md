@@ -78,7 +78,7 @@ grunt.initConfig({
 ### package.json files
 This task reads text directories from package.json file for the main project and jam packages.
 
-Text file definitions must be declared inside the `edetail.textDirs` property in a package file. This is an array of objects to parse, each containing these properties:
+Text file definitions must be declared inside the `textDirs` property in a package file. This is an array of objects to parse, each containing these properties:
 
 #### textDirs.path
 Type: `String`
@@ -93,23 +93,21 @@ Array of file extensions to match inside the textDirs.path
 #### example package.json property
 
 ```
-"edetail": {
-    "textDirs": [
-        {
-            "path": "data"
-            "fileTypes": [
-                "json",
-                "yaml"
-            ] 
-        },
-        {
-            "path": "templates"
-            "fileTypes": [
-                "html"
-            ] 
-        }
-    ]
-}
+"textDirs": [
+    {
+        "path": "data"
+        "fileTypes": [
+            "json",
+            "yaml"
+        ] 
+    },
+    {
+        "path": "templates"
+        "fileTypes": [
+            "html"
+        ] 
+    }
+]
 ```
 
 ## Contributing
