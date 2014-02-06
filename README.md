@@ -33,7 +33,11 @@ grunt.initConfig({
             interrupt: true
         },
         textFiles: {
-            files: ['project/data', 'project/templates', 'project/jam/require.config'],
+            files: [
+                'project/data/**/*.{json, yaml}',
+                'project/templates/**/*.html',
+                'project/jam/require.config'
+            ],
             tasks: ['makeTextFiles'],
             options: {
                 event: ['added', 'deleted'],
