@@ -8,7 +8,7 @@ define([
 
     var textFilesHash = {};
     _(arguments).chain().slice(1).each(function (item, index) {
-       textFilesHash[files[index]] = item
+       textFilesHash[files[index]] = item;
     });
     return textFilesHash;
 });
