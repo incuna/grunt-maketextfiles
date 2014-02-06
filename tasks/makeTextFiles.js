@@ -118,7 +118,7 @@ module.exports = function(grunt) {
                     if (!filePaths[filePath]) {
                         //dont add if we already have the paths in the list
                         //this allows overriding of paths by the project
-                        var requireBasePath = '';
+                        var requireBasePath = 'text!';
                         if (textDir.packageName) {
                             requireBasePath = textDir.packageName + '/';
                         }
