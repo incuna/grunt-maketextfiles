@@ -28,6 +28,8 @@ module.exports = function(grunt) {
         //static vars
         var packageFileName = 'package.json';
         var projectPackage = grunt.file.readJSON(packageFileName);
+        //template file relative to this file
+        var templateFileName = '../templates/textFiles.template.js';
 
         //converts path relative to project root to absolute file system path 
         function projectToAbsPath(relPath) {
@@ -84,19 +86,8 @@ module.exports = function(grunt) {
             return jamPackages;
         }
 
-        function init() {
-            //var to store all text dirs
-            var textDirs = [];
-
-            //Add text dirs from main project
-            textDirs = textDirs.concat(textDirsFromPackage(projectPackage));
-
-            var jamPackages = getJamPackages();
-            //Add jam package text dirs to list
-            _(jamPackages).each(function(jamPackage) {
-                textDirs = textDirs.concat(textDirsFromPackage(jamPackage, projectPackage.jam.packageDir));
-            });
-
+        //takes an array of textDir objects and returns all matched filepaths inside as actual paths and requireJS mdoule paths
+        function expandTextDirFilePaths(textDirs) {
             //Look through each module path and make a list of matching text files
             //We make two arrays as they need to be output separately in the template
             var filePaths = [];
@@ -126,13 +117,14 @@ module.exports = function(grunt) {
                 });
             });
 
-            if (!filePaths) {
-                //warn and exit grunt with a message
-                grunt.warn('No files found', 0);
-            }
+            return {
+                realPaths: filePaths,
+                requireJSPaths: requireJSPaths
+            };
+        }
 
-            //template file relative to this file
-            var templateFileName = '../templates/textFiles.template.js';
+        //write out textfiles.js file from template and filepath data
+        function writeTemplate(filePaths) {
             // Write out the textFiles manifest using the template and the built files array
             //get absolute template path in filesystem
             var templatePath = pluginToAbsPath(templateFileName);
@@ -140,13 +132,37 @@ module.exports = function(grunt) {
             var templateString = fs.readFileSync(templatePath, 'utf8');
 
             grunt.log.writeln('Writing ' + options.destinationFileName);
+
             var fileTemplate = _.template(templateString);
             var destinationFileContents = fileTemplate({
-                requirePaths: requireJSPaths.join("',\n    '"),
-                textFiles: filePaths.join("',\n        '")
+                requirePaths: filePaths.requireJSPaths.join("',\n    '"),
+                textFiles: filePaths.realPaths.join("',\n        '")
             });
             var destinationPath = projectToAbsPath(options.destinationFileName);
             fs.writeFileSync(destinationPath, destinationFileContents);
+        }
+
+        function init() {
+            //var to store all text dirs
+            var textDirs = [];
+
+            //Add text dirs from main project
+            textDirs = textDirs.concat(textDirsFromPackage(projectPackage));
+
+            var jamPackages = getJamPackages();
+            //Add jam package text dirs to list
+            _(jamPackages).each(function(jamPackage) {
+                textDirs = textDirs.concat(textDirsFromPackage(jamPackage, projectPackage.jam.packageDir));
+            });
+
+            var filePaths = expandTextDirFilePaths(textDirs);
+
+            if (!filePaths.realPaths) {
+                //warn and exit grunt with a message
+                grunt.warn('No files found', 0);
+            }
+
+            writeTemplate(filePaths);
         }
 
         init();
