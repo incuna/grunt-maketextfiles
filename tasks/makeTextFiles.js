@@ -42,9 +42,10 @@ module.exports = function(grunt) {
 
         //takes a parsed package.json object and requireJS module name, and returns any text dirs as an array
         function textDirsFromPackage(packageObj, jamDir) {
-            var packageName = packageObj.name || null;
+            var packageName = null;
             var packagePath = null;
             if (jamDir) {
+                packageName = packageObj.name;
                 packagePath = jamDir + '/' + packageName;
             }
 
@@ -72,8 +73,8 @@ module.exports = function(grunt) {
                     //we have some jam packages, so look for package.json files in each package
                     for (var packageName in projectPackage.jam.dependencies) {
                         var packageFilePath = projectPackage.jam.packageDir + '/' + packageName + '/' + packageFileName;
-                        if (grunt.file.exists(packageFileName)) {
-                            jamPackageFiles.push(packageFileName);
+                        if (grunt.file.exists(packageFilePath)) {
+                            jamPackageFiles.push(packageFilePath);
                         }
                     }
                 }
