@@ -24,76 +24,41 @@ grunt.loadNpmTasks('grunt-maketextfiles');
 In your project's Gruntfile, add a section named `makeTextFiles` to the data object passed into `grunt.initConfig()`.
 
 ```js
-var baseDir = 'project/';
-//find and load the requirejs settings module
-var settings = require('grunt-maketextfiles/lib/settings').init(grunt);
-var textFileTypes = [
-    'json',
-    'yaml',
-    'html'
-];
-var textWatchDirs = grunt.util._.map(settings.modulePaths, function (module) {
-    return baseDir + module.path + '/**/*.{' + textFileTypes.join(',') + '}';
-});
 
 grunt.initConfig({
-    baseDir: baseDir,
-    textDirs: settings.modulePaths,
-    textWatchDirs: textWatchDirs,
-    textFileTypes: textFileTypes,
-    makeTextFiles: {
-        options: {
-            dataDirs: '<%= textDirs %>',
-            fileTypes: '<%= textFileTypes %>'
-        },
-    },
-    //if you are using grunt watch, also add
+    //if you are using grunt watch, add
     watch: {
         options: {
             atBegin: true,
             interrupt: true
         },
-        textFiles: {
-            files: '<%= textWatchDirs %>',
+        textFilesProject: {
+            files: [
+                'project/data/**/*.{json, yaml}',
+                'project/templates/**/*.html',
+            ],
             tasks: ['makeTextFiles'],
             options: {
                 event: ['added', 'deleted'],
-                dataDirs: '<%= textDirs %>',
-                fileTypes: '<%= textFileTypes %>'
             }
+        },
+        textFilesJam: {
+            files: [
+                'project/jam/require.config.js'
+            ],
+            tasks: ['makeTextFiles'],
         }
     }
 });
 ```
 
-To generate the 
-
 ### Options
-
-#### options.dataDirs
-Type: `Array`
-Default value: `[]`
-
-An array of objects containing properties for requirejs module names and paths look for files in.
-
-#### options.projectPath
-Type: `String`
-Default value: `project/`
-
-Path to the project folder which contains the modules. Output file is also written here.
-Needs trailing slash.
 
 #### options.destinationFileName
 Type: `String`
-Default value: `textfiles.js`
+Default value: `project/textFiles.js`
 
-The name of the output file. Written to options.projectPath.
-
-#### options.fileTypes
-Type: `Array`
-Default value: `['json', 'yaml', 'html']`
-
-Array of file extensions to look for in the matching folders.
+The name of the output file relative to the Gruntfile.
 
 ### Usage Examples
 
@@ -104,43 +69,45 @@ These would be the default options as used in a Gruntfile.
 grunt.initConfig({
   makeTextFiles: {
     options: {
-      dataDirs: [
-        {
-          name: 'compiled-data',
-          path: 'compiled-data'
-        },
-        {
-          name: 'templates',
-          path: 'templates'
-        },
-        {
-          name: 'edetail/templates',
-          path: 'jam/edetail/templates'
-        },
-        {
-          name: 'edetail-widgets/templates',
-          path: 'jam/edetail-widgets/templates'
-        },    {
-          name: 'edetail-video/templates',
-          path: 'jam/edetail-video/templates'
-        },    {
-          name: 'edetail-audio/templates',
-          path: 'jam/edetail-audio/templates'
-        },    {
-          name: 'edetail-presentation-builder/templates',
-          path: 'jam/edetail-presentation-builder/templates'
-        }
-      ],
-      projectPath: 'project/',
-      destinationFileName: 'textFiles.js',
-      fileTypes: [
-        'json',
-        'yaml',
-        'html'
-      ]
+      destinationFileName: 'project/textFiles.js',
     },
   },
 });
+```
+
+### package.json files
+This task reads text directories from package.json file for the main project and jam packages.
+
+Text file definitions must be declared inside the `textDirs` property in a package file. This is an array of objects to parse, each containing these properties:
+
+#### textDirs.path
+Type: `String`
+
+Relative path of the directory to parse
+
+#### textDirs.fileTypes
+Type: `array`
+
+Array of file extensions to match inside the textDirs.path
+
+#### example package.json property
+
+```
+"textDirs": [
+    {
+        "path": "data"
+        "fileTypes": [
+            "json",
+            "yaml"
+        ] 
+    },
+    {
+        "path": "templates"
+        "fileTypes": [
+            "html"
+        ] 
+    }
+]
 ```
 
 ## Contributing
