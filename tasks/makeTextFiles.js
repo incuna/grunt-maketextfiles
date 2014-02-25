@@ -1,6 +1,6 @@
 /*
  * grunt-makeTextFiles
- * 
+ *
  *
  * Copyright (c) 2014 Incuna Ltd.
  * Licensed under the MIT license.
@@ -32,11 +32,11 @@ module.exports = function(grunt) {
             destinationFileName: projectBasePath + 'textFiles.js'
         });
 
-        //converts path relative to project root to absolute file system path 
+        //converts path relative to project root to absolute file system path
         function projectToAbsPath(relPath) {
             return path.resolve(relPath);
         }
-        //converts path relative to plugin root to absolute file system path 
+        //converts path relative to plugin root to absolute file system path
         function pluginToAbsPath(relPath) {
             return path.join(__dirname, relPath);
         }
