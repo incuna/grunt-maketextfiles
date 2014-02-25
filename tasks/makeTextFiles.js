@@ -115,7 +115,7 @@ module.exports = function(grunt) {
 
                 //populate lists for template
                 _(matchingFiles).each(function(filePath) {
-                    if (!filePaths[filePath]) {
+                    if (!_.contains(filePaths, filePath)) {
                         //dont add if we already have the paths in the list
                         //this allows overriding of paths by the project
                         var requireBasePath = 'text!';
