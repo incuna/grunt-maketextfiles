@@ -25,13 +25,14 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "nodeunit test"
   },
   "dependencies": {
     "lodash": "~2.4.1"
   },
   "devDependencies": {
-    "grunt": "~0.4.1"
+    "grunt": "~0.4.1",
+    "nodeunit": "~0.8.6"
   },
   "peerDependencies": {
     "grunt": "~0.4.1"
