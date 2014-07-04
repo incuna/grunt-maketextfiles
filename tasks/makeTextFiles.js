@@ -53,7 +53,7 @@ module.exports = function(grunt) {
 
             var textDirs = [];
             if (packageObj.textDirs) {
-                _(packageObj.textDirs).each(function(textDir) {
+                _(packageObj.textDirs).each(function (textDir) {
                     //we add the package name and path properties so we can use them later when making the template
                     textDir.packageName = packageName;
                     textDir.basePath = basePath;
@@ -82,7 +82,7 @@ module.exports = function(grunt) {
                 }
 
                 //read package.jsons and make object of parsed packages
-                jamPackages = _(jamPackageFiles).map(function(packageFilePath) {
+                jamPackages = _(jamPackageFiles).map(function (packageFilePath) {
                     return grunt.file.readJSON(packageFilePath);
                 });
             }
@@ -100,7 +100,7 @@ module.exports = function(grunt) {
             _(textDirs).each(function (textDir) {
                 //match all files for this textdir
                 var fileMatchStrings = [];
-                _(textDir.fileTypes).each(function(fileType) {
+                _(textDir.fileTypes).each(function (fileType) {
                     var fileTypeMatchString = textDir.path + '/**/*.' + fileType;
                     fileMatchStrings.push(fileTypeMatchString);
                 });
@@ -114,7 +114,7 @@ module.exports = function(grunt) {
                 var matchingFiles = grunt.file.expand(matchOptions, fileMatchStrings);
 
                 //populate lists for template
-                _(matchingFiles).each(function(filePath) {
+                _(matchingFiles).each(function (filePath) {
                     if (!_.contains(filePaths, filePath)) {
                         //dont add if we already have the paths in the list
                         //this allows overriding of paths by the project
@@ -163,7 +163,7 @@ module.exports = function(grunt) {
 
             var jamPackages = getJamPackages();
             //Add jam package text dirs to list
-            _(jamPackages).each(function(jamPackage) {
+            _(jamPackages).each(function (jamPackage) {
                 textDirs = textDirs.concat(textDirsFromPackage(jamPackage, projectPackage.jam.packageDir));
             });
 
