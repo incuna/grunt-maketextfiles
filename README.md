@@ -1,4 +1,4 @@
-# grunt-makeTextFiles
+# grunt-maketextfiles
 
 > Builds the textfiles.js manifest needed to import data and template textfiles into requireJS for eDetails
 > Based on original makeTextFiles npm module: https://github.com/incuna/maketextfiles
@@ -18,10 +18,10 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-maketextfiles');
 ```
 
-## The "makeTextFiles" task
+## The "maketextfiles" task
 
 ### Overview
-In your project's Gruntfile, add a section named `makeTextFiles` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `maketextfiles` to the data object passed into `grunt.initConfig()`.
 
 ```js
 
@@ -37,7 +37,7 @@ grunt.initConfig({
                 'project/data/**/*.{json, yaml}',
                 'project/templates/**/*.html',
             ],
-            tasks: ['makeTextFiles'],
+            tasks: ['maketextfiles'],
             options: {
                 event: ['added', 'deleted'],
             }
@@ -46,7 +46,7 @@ grunt.initConfig({
             files: [
                 'project/jam/require.config.js'
             ],
-            tasks: ['makeTextFiles'],
+            tasks: ['maketextfiles'],
         }
     }
 });
