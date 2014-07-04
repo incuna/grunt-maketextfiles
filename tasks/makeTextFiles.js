@@ -8,12 +8,12 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     // Please see the Grunt documentation for more information regarding task
     // creation: http://gruntjs.com/creating-tasks
 
-    grunt.registerTask('makeTextFiles', 'Builds textfiles.js needed by eDetails', function() {
+    grunt.registerTask('maketextfiles', 'Builds textfiles.js needed by eDetails', function () {
 
         // import Nodejs libs
         var fs = require('fs');
