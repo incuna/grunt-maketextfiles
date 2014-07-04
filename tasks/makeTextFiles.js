@@ -1,5 +1,5 @@
 /*
- * grunt-makeTextFiles
+ * grunt-maketextfiles
  *
  *
  * Copyright (c) 2014 Incuna Ltd.
