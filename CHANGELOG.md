@@ -1,6 +1,6 @@
 ## Release History
 
-### Upcoming
+## 1.1.0
 * Allow customisation of 'project/' path and 'package.json' loading.
 
 # 1.0.0
