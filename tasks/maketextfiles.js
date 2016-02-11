@@ -20,17 +20,24 @@ module.exports = function (grunt) {
         var path = require('path');
         var _ = require('lodash');
 
-        //static vars
         var packageFileName = 'package.json';
-        var projectBasePath = 'project/';
-        var projectPackage = grunt.file.readJSON(packageFileName);
-        //template file relative to this file
-        var templateFileName = '../templates/textFiles.template.js';
 
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
+            projectBasePath: 'project/',
             destinationFileName: projectBasePath + 'textFiles.js'
         });
+        if (!options.projectPackage) {
+            // Only load this file again if it's not given.
+            options.projectPackage = grunt.file.readJSON(packageFileName);
+        }
+
+        //static vars
+        var projectBasePath = options.projectBasePath;
+        var projectPackage = options.projectPackage;
+
+        //template file relative to this file
+        var templateFileName = '../templates/textFiles.template.js';
 
         //converts path relative to project root to absolute file system path
         function projectToAbsPath(relPath) {
