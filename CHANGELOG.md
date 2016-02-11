@@ -1,5 +1,8 @@
 ## Release History
 
+### Upcoming
+* Allow customisation of 'project/' path and 'package.json' loading.
+
 # 1.0.0
 * renamed task from `makeTextFiles ` to `maketextfiles` to be consistent with package name and work with jit-grunt
 

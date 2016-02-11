@@ -54,6 +54,18 @@ grunt.initConfig({
 
 ### Options
 
+#### options.projectPackage
+Type: `Object`
+Default value: `grunt.file.readJSON('package.json')`
+
+The contents of `package.json` where `textDirs` are set.
+
+#### options.projectBasePath
+Type: `String`
+Default value: `project/`
+
+The name of the project folder to search in.
+
 #### options.destinationFileName
 Type: `String`
 Default value: `project/textFiles.js`
@@ -69,6 +81,8 @@ These would be the default options as used in a Gruntfile.
 grunt.initConfig({
   makeTextFiles: {
     options: {
+      projectPackage: grunt.file.readJSON('package.json'),
+      projectBasePath: 'project/',
       destinationFileName: 'project/textFiles.js',
     },
   },
