@@ -1,5 +1,8 @@
 ## Release History
 
+### 1.1.1
+* BUGFIX: stop undefined `projectBasePath` resulting in a file `undefinedtextFiles.js`.
+
 ## 1.1.0
 * Allow customisation of 'project/' path and 'package.json' loading.
 

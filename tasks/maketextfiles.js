@@ -25,7 +25,7 @@ module.exports = function (grunt) {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
             projectBasePath: 'project/',
-            destinationFileName: projectBasePath + 'textFiles.js'
+            destinationFileName: 'project/textFiles.js'
         });
         if (!options.projectPackage) {
             // Only load this file again if it's not given.
